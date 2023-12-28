@@ -17,7 +17,7 @@ args = parser.parse_args()
 if args.outputFile is not None:
   outputFile = args.outputFile
 else:
-  outputFile = args.prompt + "_" + args.model + "_" + args.quality + "_" + args.style + ".md"
+  outputFile = args.prompt + "_" + args.model + "_" + args.quality + "_" + args.style + ".png"
 
 # check if output file exists
 if os.path.isfile(outputFile):

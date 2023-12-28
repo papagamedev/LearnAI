@@ -30,7 +30,7 @@ parser.add_argument("inputFile", help="File name to be sent to google api", type
 parser.add_argument("-m", "--model", help="Model to use", choices=["gemini-pro","gpt-3.5-turbo","gpt-4","gpt-4-1106-preview"], type=str, default="gpt-4-1106-preview")
 parser.add_argument("-o","--outputFile", help="File name to write with translated article", type=str)
 parser.add_argument("-t","--temperature", required=False, type=float, default=1.0)
-parser.add_argument("-mt", "--maxTokens", required=False, type=int, default=2048)
+parser.add_argument("-mt", "--maxTokens", required=False, type=int, default=4096)
 args = parser.parse_args()
 
 # read file to translate
