@@ -27,7 +27,7 @@ def TranslateArticle(article, model, temperature, maxTokens):
 
 parser = argparse.ArgumentParser("blog_translate")
 parser.add_argument("inputFile", help="File name to be sent to google api", type=str)
-parser.add_argument("-m", "--model", help="Model to use", choices=["gemini-pro","gpt-3.5-turbo","gpt-4","gpt-4-1106-preview"], type=str, default="gpt-4-1106-preview")
+parser.add_argument("-m", "--model", help="Model to use", choices=["gemini-pro","gpt-3.5-turbo","gpt-4","gpt-4o"], type=str, default="gpt-4o")
 parser.add_argument("-o","--outputFile", help="File name to write with translated article", type=str)
 parser.add_argument("-t","--temperature", required=False, type=float, default=1.0)
 parser.add_argument("-mt", "--maxTokens", required=False, type=int, default=4096)
@@ -39,7 +39,7 @@ try:
   with open(args.inputFile, encoding="utf-8") as f:
     fileContents = f.read()
 except IOError as e:
-  print("Failed to read input file: " + args.inputFile)
+  print("Error: Failed to read input file: " + args.inputFile)
   exit(2)
 
 # if no output file was provided, use a default name
@@ -50,7 +50,7 @@ else:
 
 # check if output file exists
 if os.path.isfile(outputFile):
-  print("Output file already exists!")
+  print("Error: Output file already exists!")
   exit(1)
 
 # parse the input file
@@ -58,6 +58,18 @@ post = frontmatter.loads(fileContents)
 article = post.content
 description = post.metadata['description']
 title = post.metadata['title']
+
+if description is None:
+  print("Error: Description in front matter is empty!")
+  exit(4)
+
+if title is None:
+  print("Error: Title in front matter is empty!")
+  exit(5)
+
+if article is None:
+  print("Error: Article is empty!")
+  exit(6)
 
 # translate texts using the model  
 translatedDescription = TranslateShortText(description, args.model, args.temperature, args.maxTokens)
@@ -78,7 +90,7 @@ try:
     outputFileContents = frontmatter.dumps(post) 
     fo.write(outputFileContents)
 except IOError as e:
-  print("Failed to write output file: " + outputFile)
+  print("Error: Failed to write output file: " + outputFile)
   print("Writing output to console")
   print(outputFileContents)
   exit(3)
